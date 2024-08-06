@@ -1,0 +1,16 @@
+
+# Steps to create virtual environment so that all can use it 
+1 .Create virtual environment using python -m venv .venv
+2. Activate the enviroment .venv\Scripts\activate
+3. Install libraries using pip 
+4. After all libraries are installed then run command :- "pip freeze > requirements.txt" , it will automatically create file that contains libraries with their versions
+5. Next time we can install libraries using :- pip install -r requirements.txt
+
+
+
+
+# Libraires :- 
+- pip install tk :- Tkinter
+- pip install pillow
+- pip install algokit-utils
+- pip install Flask
