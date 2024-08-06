@@ -63,7 +63,7 @@ class QuizApp:
     def complete_tasks(self, obj):
         while not self.stopEvent.is_set():
             obj.complete_task()
-            time.sleep(10)
+            time.sleep(0.5)
 
     def QnA(self):
         self.data.default()
@@ -242,7 +242,7 @@ class QuizApp:
     def check_queue(self):
         if not self.queue_obj.task_queue.empty():
             messagebox.showwarning("Transactions Pending", "The transactions are yet to be written. Do not close this window!")
-            self.data.root.after(1000, self.check_queue)
+            self.check_queue()
         else:
             self.stopEvent.set()
             messagebox.showinfo("All Transactions Written", "You can safely close this window")
