@@ -24,19 +24,20 @@ class taskQueue:
             "answer": answer
         }
         self.task_queue.put(single_task)
-        print(f"Task appended: {single_task}")
-        print(f"Queue size after appending: {self.task_queue.qsize()}")
+        # print(f"Task appended: {single_task}")
+        # print(f"Queue size after appending: {self.task_queue.qsize()}")
         return 1
 
     def complete_task(self):
         if not self.task_queue.empty():
             task_data = self.task_queue.get()
-            print(f"Executing task: {task_data}")
+            # print(f"Executing task: {task_data}")
             startTime = task_data['starttime']
             endTime = task_data['endtime']
             Booklet = task_data['booklet']
             Question_Number = task_data['question_number']
             Answer = task_data['answer']
+
             question_and_answer = f"{Question_Number} - {Answer}"
 
             deploy_data(start_time=startTime, end_time=endTime, booklet=Booklet, que_ans=question_and_answer)
@@ -176,7 +177,7 @@ class QuizApp:
         if not self.selected_option.get():
             messagebox.showerror("Error", "Please select an answer before proceeding.")
         else:
-            if self.current_question_index < len(self.questions) - 1:
+            if self.current_question_index < len(self.questions):
                 self.user_answers[self.current_question_index] = self.selected_option.get()
                 selected_ans = self.user_answers[self.current_question_index]
                 self.current_question_index += 1
@@ -225,9 +226,6 @@ class QuizApp:
             fg="green",
         )
         decoration_label.pack(pady=10)
-
-        
-
         close_button = tk.Button(
             self.content_frame,
             text="Close",
@@ -240,15 +238,16 @@ class QuizApp:
         close_button.pack(pady=20)
 
     def check_queue(self):
-        if not self.queue_obj.task_queue.empty():
-            messagebox.showwarning("Transactions Pending", "The transactions are yet to be written. Do not close this window!")
-            self.check_queue()
-        else:
-            self.stopEvent.set()
-            messagebox.showinfo("All Transactions Written", "You can safely close this window")
+        while True :
+            if not self.queue_obj.task_queue.empty() :
+                messagebox.showwarning("Transactions Pending", "The transactions are yet to be written. Do not close this window!")
+            else:
+                self.stopEvent.set()
+                messagebox.showinfo("All Transactions Written", "You can safely close this window")
+                break
 
     def Final_Sub(self):
-        self.user_answers[self.current_question_index] = self.selected_option.get()
+
         sc = sum(
             1
             for i, answer in enumerate(self.user_answers)
@@ -256,33 +255,37 @@ class QuizApp:
         )
         total_questions = len(self.questions)
         percentage_score = (sc / total_questions) * 100
-
-        
-        
-        self.check_queue()
         answer = messagebox.askquestion(
             "Confirm", "Confirm you want to submit answers?"
         )
+
+
+
         if answer == "yes":
+
+            # Since it is a last question answer and our login "next_question" goes only upto (len(question)-1 ) we did "self.current_question_index+1"
+            self.user_answers[self.current_question_index] = self.selected_option.get()
             selected_ans = self.user_answers[self.current_question_index]
             que_ans = f"{self.current_question_index+1} = {selected_ans}"
-            self.queue_obj.add_task(start_time="-" , end_time="-" , booklet="B" , question_no = self.current_question_index  , answer = selected_ans )
+
+            print(f"Last question asnwer :- {que_ans}")
+            self.queue_obj.add_task(start_time="-" , end_time="-" , booklet="B" , question_no =self.current_question_index+1  , answer = selected_ans )
             
-            student_data = {
-                "wallet_address": wallet_address,
-                "booklet": "B",
-                "start_time": "-",
-                "que_ans": que_ans,
-                "end_time": "-",
-                "transaction_id": "transaction_id"
-            }
+            # student_data = {
+            #     "wallet_address": wallet_address,
+            #     "booklet": "B",
+            #     "start_time": "-",
+            #     "que_ans": que_ans,
+            #     "end_time": "-",
+            #     "transaction_id": "transaction_id"
+            # }
             # self.login_obj.add_student_data(student_data)
             current_time = datetime.datetime.now()
             date_str = f"{current_time.day}/{current_time.month}/{current_time.year}"
             time_str = f"{current_time.hour}:{current_time.minute}:{current_time.second}"
             end_time = f"{date_str} {time_str}"
             self.queue_obj.add_task(start_time="-" , end_time=end_time , booklet="B" , question_no = "-"  , answer = "-" )
-            
+            self.check_queue()
             student_data = {
                 "wallet_address": wallet_address,
                 "booklet": "B",
@@ -291,9 +294,11 @@ class QuizApp:
                 "end_time": end_time,
                 "transaction_id": "transaction_id"
             }
+
             # self.login_obj.add_student_data(student_data)
             print("Before removing:", get_wallet_address())
             remove_wallet_address()
+            
             try:
                 print(get_wallet_address())
             except:

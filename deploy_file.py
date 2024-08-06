@@ -86,7 +86,7 @@ def deploy_data(booklet,start_time,que_ans,end_time):
         # Decode the key from base64 to a readable format (if necessary)
         decoded_key = base64.b64decode(key).decode('utf-8')
         decoded_value = base64.b64decode(value).decode('utf-8')
-        print(f"{decoded_key} : {decoded_value}")
+        # print(f"{decoded_key} : {decoded_value}")
     
     transaction_id = response.tx_id
     print("Transaction ID: ",transaction_id)
