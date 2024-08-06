@@ -87,12 +87,12 @@ class LoginApp:
             if loading_window.winfo_exists():  # Check if the window still exists
                 label.config(image=frames[frame_index])
                 frame_index = (frame_index + 1) % len(frames)
-                loading_window.after(100, update_frame, frame_index)  # Update every 100ms
+                # loading_window.after(100, update_frame, frame_index)  # Update every 100ms
 
         update_frame(0)
 
         # Simulate processing task
-        self.data.root.after(3000, lambda: self.finish_loading(loading_window))
+        # self.data.root.after(3000, lambda: self.finish_loading(loading_window))
 
     def finish_loading(self,loading_window=None):
         if loading_window and loading_window.winfo_exists():  # Check if the window still exists
@@ -113,7 +113,7 @@ class LoginApp:
 
 
     def process_login(self):
-        self.create_database_and_table()
+        # self.create_database_and_table()
         transaction_id = deploy_data("B", self.data.start_time, "-", "-")
         student_data = {
             "wallet_address": wallet_address,
@@ -124,7 +124,7 @@ class LoginApp:
             "transaction_id": transaction_id
         }
         # print("Sending student data:", student_data)
-        self.add_student_data(student_data)
+        # self.add_student_data(student_data)
         self.data.root.destroy()
         self.open_quiz_page()
 
