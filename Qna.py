@@ -177,7 +177,7 @@ class QuizApp:
         if not self.selected_option.get():
             messagebox.showerror("Error", "Please select an answer before proceeding.")
         else:
-            if self.current_question_index < len(self.questions):
+            if self.current_question_index < len(self.questions) :
                 self.user_answers[self.current_question_index] = self.selected_option.get()
                 selected_ans = self.user_answers[self.current_question_index]
                 self.current_question_index += 1
@@ -247,7 +247,6 @@ class QuizApp:
                 break
 
     def Final_Sub(self):
-
         sc = sum(
             1
             for i, answer in enumerate(self.user_answers)
@@ -258,9 +257,6 @@ class QuizApp:
         answer = messagebox.askquestion(
             "Confirm", "Confirm you want to submit answers?"
         )
-
-
-
         if answer == "yes":
 
             # Since it is a last question answer and our login "next_question" goes only upto (len(question)-1 ) we did "self.current_question_index+1"
